@@ -45,6 +45,7 @@ String requiredNote_name
 Date move_date
 
 Note class would need a copy constuctor which copy everything with a note as parameter 
+
 This will be used as deep copy of note object
 
 Folder class would need a method to removeNote, which will be used for later function
@@ -52,17 +53,27 @@ with the given name, search the note in the note list
 and then remove it
 
 New field in the NoteBook class, a list of MoveHistory objects
+
 A new method would be addMoveHistory(MoveHistory mh)
+
 This method will add the MoveHistory object into the MoveHistory list
 
 New method in the NoteBook call moveNote(String oldFolder_name,String requiredNote,String newFolder_name)
+
 First of all, will search through Folder list which match the old folder name
+
 Then search through the note list in the old folder which match the note name
+
 If found, use a varable to store the object of the note, then use the varable to do a deep copy (call copy constructor) and then add to the new folder (using insert note)
+
 If adding is successful, call the removeNote and remove the note in the oldFolder
+
 And for the record, create a MoveHistory object by calling its constructor with parameters oldFolder_name, newFolder_name, and requiredNote_name
+
 The moving date would be the creation of this MoveHistory object.
+
 After creating MoveHistory object, add to the MoveHistory list with addMoveHistory(MoveHistory mh)
+
 FINISHED!
 
 I think there would be a failure if directly move the note, it would be better to make a copy first then remove the one in the old location. 
