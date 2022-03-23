@@ -5,41 +5,62 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-
-
 public class HeapTest {
 
-    private Heap<Integer> integerHeap;
-
-    @Before
-    public void setup() {
-        integerHeap = new Heap<>();
+    public static void main(String[] args) {
+        testPeak();
+        testPoll();
+        testSize();
     }
 
-    @Test
-    public void peek() {
+    public static void testPeak() {
+        output("Test Peak");
+        Heap<Integer> integerHeap = new Heap<>();
         integerHeap.addAll(Arrays.asList(30, 10, 20));
-        assertEquals(Integer.valueOf(10), integerHeap.peek());
+        //test
+        System.out.println(integerHeap.peek());
+        if(Integer.valueOf(10).equals(integerHeap.peek())) {
+            output("Success");
+        } else {
+            output("Fail");
+        }
+        
     }
 
-    @Test
-    public void poll() {
+    public static void testPoll() {
+        output("Test Poll");
+        Heap<Integer> integerHeap = new Heap<>();
         List<Integer> values = Arrays.asList(2, 53, 213, 5, 1, 5, 4, 210, 14, 26, 44, 35, 31, 33, 19, 52, 27);
         integerHeap.addAll(values);
 
         Collections.sort(values);
         for (int x : values) {
-            assertEquals(Integer.valueOf(x), integerHeap.poll());
+            if(!Integer.valueOf(x).equals(integerHeap.poll())) {
+                output("Fail");
+                return;
+            }
+        }
+        output("Success");
+    }
+
+    public static void testSize() {
+        output("Test Size");
+        Heap<Integer> integerHeap = new Heap<>();
+        List<Integer> values = Arrays.asList(10, 14, 26, 44, 35, 31, 33, 19, 52, 27);
+        integerHeap.addAll(values);
+        if(values.size() == integerHeap.size()) {
+            output("Success");
+        } else {
+            output("Fail");
         }
     }
 
-    @Test
-    public void size() {
-    	List<Integer> values = Arrays.asList(10, 14, 26, 44, 35, 31, 33, 19, 52, 27);
-        integerHeap.addAll(values);
-        assertEquals(values.size(), integerHeap.size());
+    public static void output(String s) {
+        System.out.println(s);
     }
+
+
+
+
+
 }

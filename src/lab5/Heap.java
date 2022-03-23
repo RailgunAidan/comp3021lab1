@@ -50,7 +50,7 @@ public class Heap<T extends Comparable<T>> {
     		this.heapifyDown();
     		return temp;
     	}
-        return null; // replace this line with implementation
+        //return null; // replace this line with implementation
     }
 
     private void heapifyDown() {
@@ -76,6 +76,8 @@ public class Heap<T extends Comparable<T>> {
      */
     public void add(T obj) {
         //TODO
+    	this.container.add(obj);
+    	this.heapifyUp();
     }
 
     public void addAll(Collection<T> list) {
@@ -88,6 +90,11 @@ public class Heap<T extends Comparable<T>> {
      */
     private void heapifyUp() {
         // TODO
+    	int pos = this.container.size() -1; // last element position
+    	while(hasParent(pos) && container.get(pos).compareTo(container.get(getParentIndex(pos)))<0) {
+    		swap(pos,getParentIndex(pos));
+    		pos = getParentIndex(pos);
+    	}
     }
 
     public int size() {
