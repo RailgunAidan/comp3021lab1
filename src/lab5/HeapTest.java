@@ -18,7 +18,7 @@ public class HeapTest {
         Heap<Integer> integerHeap = new Heap<>();
         integerHeap.addAll(Arrays.asList(30, 10, 20));
         //test
-        System.out.println(integerHeap.peek());
+        //System.out.println(integerHeap.peek());
         if(Integer.valueOf(10).equals(integerHeap.peek())) {
             output("Success");
         } else {
