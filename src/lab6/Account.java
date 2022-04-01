@@ -18,7 +18,7 @@ public class Account {
 
 	// TODO: Task1 
 	// replace the null with a lambda expression
-	public static Consumer<Account> add100 = null;
+	public static Consumer<Account> add100 = a -> a.balance += 100;
 
 	
 
@@ -27,7 +27,9 @@ public class Account {
 	// We want checkBound to check BOTH lowerBound AND upperBound.
 	public static Predicate<Account> lowerBound = a -> a.balance >=0;
 	public static Predicate<Account> upperBound = a -> a.balance <=10000;
-	public static Predicate<Account> checkBound = null;
+	public static Predicate<Account> checkBound = a -> Account.lowerBound.test(a) && Account.upperBound.test(a);
+	// combine, copy from test to call another function
+	
 
 	interface AddMaker {
 		Consumer<Account> make(int N);
@@ -35,14 +37,17 @@ public class Account {
 
 	// TODO: Task3 
 	// replace the null with a lambda expression
-	public static AddMaker maker = null;
+	public static AddMaker maker = n -> (a-> a.balance += n);
+	// use n, create another expression, the content inside () is similar to add100
 
 
 	// You can assume that all the Account in acconts have positive balances.
 	public static int getMaxAccountID(List<Account> accounts) {
 		// TODO: Task4 
 		// replace the null with a lambda expression
-		Account maxOne = accounts.stream().reduce(new Account(0, -100), null);
+		//Account maxOne = accounts.stream().reduce(new Account(0, -100), null);
+		Account maxOne = accounts.stream().reduce(new Account(0, -100),(a,b) -> a.balance > b.balance? a:b);
+		//lambda explain: take in 2 account object, compare balance, return larger one
 
 		return maxOne.id;
 	}

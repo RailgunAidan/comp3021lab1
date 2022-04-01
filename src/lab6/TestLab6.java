@@ -34,7 +34,7 @@ public class TestLab6 {
 	}
 
 	public static void test2() {
-		output("Task1");
+		output("Task2");
 		Account a1 = new Account(1, 500);
 		Account a2 = new Account(2, -100);
 		Account a3 = new Account(3, 12000);
