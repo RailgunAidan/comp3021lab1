@@ -82,7 +82,8 @@ public class Folder implements Comparable<Folder>,Serializable{
 	//helper method
 	public boolean matching(String content, String[] keywords) {
 		boolean found = false;
-		for(int i = 0; i<keywords.length-1; i++) {
+		for(int i = 0; i<keywords.length; i++) {
+			//System.out.println("Finding a keyword " + keywords[i] + " in " + content);
 			if(i+1<keywords.length && keywords[i+1].contains("or")) {
 				if(content.contains(keywords[i]) || content.contains(keywords[i+2])) {
 					//skip "or" and the next letter for continue matching
@@ -119,6 +120,7 @@ public class Folder implements Comparable<Folder>,Serializable{
 		// create a word list removing all spaces, just words and change all to lower case
 		String s_keywords = keywords.toLowerCase();
 		String[] words = s_keywords.split("\\W+");
+		//System.out.println(words.toString());
 		// going through all the notes
 		for(Note n : notes) {
 			if (n instanceof TextNote) {

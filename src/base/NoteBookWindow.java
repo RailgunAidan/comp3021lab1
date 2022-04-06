@@ -27,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -102,11 +103,42 @@ public class NoteBookWindow extends Application {
 		Button buttonLoad = new Button("Load");
 		buttonLoad.setPrefSize(100, 20);
 		buttonLoad.setDisable(true);
+		
 		Button buttonSave = new Button("Save");
 		buttonSave.setPrefSize(100, 20);
 		buttonSave.setDisable(true);
+		
+		Label label = new Label("Search: ");
+		
+		TextField searchBar = new TextField();
+		
+		Button buttonSearch = new Button("Search");
+		
+		Button clearSearch = new Button("Clear Search");
 
-		hbox.getChildren().addAll(buttonLoad, buttonSave);
+		hbox.getChildren().addAll(buttonLoad, buttonSave, label, searchBar, buttonSearch, clearSearch);
+		
+		buttonSearch.setOnAction(new EventHandler <ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				currentSearch = searchBar.getText();
+				textAreaNote.setText("");
+				//TODO
+				updateListView();
+				
+			}
+		});
+		
+		clearSearch.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				currentSearch = "";
+				searchBar.setText("");
+				textAreaNote.setText("");
+				//TODO
+				updateListView();
+			}
+		});
 
 		return hbox;
 	}
@@ -123,7 +155,11 @@ public class NoteBookWindow extends Application {
 		vbox.setSpacing(8); // Gap between nodes
 
 		// TODO: This line is a fake folder list. We should display the folders in noteBook variable! Replace this with your implementation
-		foldersComboBox.getItems().addAll("FOLDER NAME 1", "FOLDER NAME 2", "FOLDER NAME 3");
+		ArrayList<String> names = new ArrayList<String>();
+		for(Folder f : noteBook.getFolders()) {
+			names.add(f.getName());
+		}
+		foldersComboBox.getItems().addAll(names);
 
 		foldersComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 			@Override
@@ -131,6 +167,7 @@ public class NoteBookWindow extends Application {
 				currentFolder = t1.toString();
 				// this contains the name of the folder selected
 				// TODO update listview
+				// System.out.println(currentFolder);
 				updateListView();
 
 			}
@@ -150,7 +187,28 @@ public class NoteBookWindow extends Application {
 				// This is the selected title
 				// TODO load the content of the selected note in
 				// textAreNote
+				Folder f = null;
+				Note required = null;
+				for (Folder f1:noteBook.getFolders()) {
+					if(f1.getName().equals(currentFolder)) {
+						f = f1;	
+						break;
+					}
+				}
+				// folder get
+				if (f!=null) {
+					for (Note n:f.getNotes()) {
+							if(n.getTitle().equals(title)) {
+								required = n;
+								break;
+							}
+					}
+				}
 				String content = "";
+				if (required !=null) {
+					TextNote text = (TextNote)required;
+					content = text.content;					
+				}
 				textAreaNote.setText(content);
 
 			}
@@ -165,10 +223,39 @@ public class NoteBookWindow extends Application {
 
 	private void updateListView() {
 		ArrayList<String> list = new ArrayList<String>();
-
+		System.out.println("update called");
+		// System.out.println("Search: " + currentSearch);
 		// TODO populate the list object with all the TextNote titles of the
 		// currentFolder
-
+		// look through folders to get file object
+		Folder f = null;
+		for (Folder f1:noteBook.getFolders()) {
+			if(f1.getName().equals(currentFolder)) {
+				f = f1;	
+				break;
+			}
+		}
+		// folder get!
+		if (f!=null) {
+			if (currentSearch == "") {
+				for (Note n:f.getNotes()) {
+					list.add(n.getTitle());					
+				}
+			}
+			else {
+				System.out.println("search is not empty" + f.getName());
+				List<Note> result_list = new ArrayList<Note>();
+				result_list = f.searchNotes(currentSearch);
+				System.out.println(result_list);
+				for (Note n: result_list) {
+					list.add(n.getTitle());
+					System.out.println(n.getTitle());
+				}
+			}
+			
+		}
+		
+		
 		ObservableList<String> combox2 = FXCollections.observableArrayList(list);
 		titleslistView.setItems(combox2);
 		textAreaNote.setText("");
@@ -190,7 +277,7 @@ public class NoteBookWindow extends Application {
 		textAreaNote.setPrefHeight(400);
 		// 0 0 is the position in the grid
 		grid.add(textAreaNote, 0, 0);
-
+		
 		return grid;
 	}
 
@@ -203,9 +290,9 @@ public class NoteBookWindow extends Application {
 				"Each lab has 2 credits, 1 for attendence and the other is based the completeness of your lab.");
 
 		nb.createTextNote("Books", "The Throwback Special: A Novel",
-				"Here is the absorbing story of twenty-two men who gather every fall to painstakingly reenact what ESPN called â€œthe most shocking play in NFL historyâ€� and the Washington Redskins dubbed the â€œThrowback Specialâ€�: the November 1985 play in which the Redskinsâ€™ Joe Theismann had his leg horribly broken by Lawrence Taylor of the New York Giants live on Monday Night Football. With wit and great empathy, Chris Bachelder introduces us to Charles, a psychologist whose expertise is in high demand; George, a garrulous public librarian; Fat Michael, envied and despised by the others for being exquisitely fit; Jeff, a recently divorced man who has become a theorist of marriage; and many more. Over the course of a weekend, the men reveal their secret hopes, fears, and passions as they choose roles, spend a long night of the soul preparing for the play, and finally enact their bizarre ritual for what may be the last time. Along the way, mishaps, misunderstandings, and grievances pile up, and the comforting traditions holding the group together threaten to give way. The Throwback Special is a moving and comic tale filled with pitch-perfect observations about manhood, marriage, middle age, and the rituals we all enact as part of being alive.");
+				"Here is the absorbing story of twenty-two men who gather every fall to painstakingly reenact what ESPN called “the most shocking play in NFL history” and the Washington Redskins dubbed the “Throwback Special”: the November 1985 play in which the Redskins’ Joe Theismann had his leg horribly broken by Lawrence Taylor of the New York Giants live on Monday Night Football. With wit and great empathy, Chris Bachelder introduces us to Charles, a psychologist whose expertise is in high demand; George, a garrulous public librarian; Fat Michael, envied and despised by the others for being exquisitely fit; Jeff, a recently divorced man who has become a theorist of marriage; and many more. Over the course of a weekend, the men reveal their secret hopes, fears, and passions as they choose roles, spend a long night of the soul preparing for the play, and finally enact their bizarre ritual for what may be the last time. Along the way, mishaps, misunderstandings, and grievances pile up, and the comforting traditions holding the group together threaten to give way. The Throwback Special is a moving and comic tale filled with pitch-perfect observations about manhood, marriage, middle age, and the rituals we all enact as part of being alive.");
 		nb.createTextNote("Books", "Another Brooklyn: A Novel",
-				"The acclaimed New York Times bestselling and National Book Awardâ€“winning author of Brown Girl Dreaming delivers her first adult novel in twenty years. Running into a long-ago friend sets memory from the 1970s in motion for August, transporting her to a time and a place where friendship was everythingâ€”until it wasnâ€™t. For August and her girls, sharing confidences as they ambled through neighborhood streets, Brooklyn was a place where they believed that they were beautiful, talented, brilliantâ€”a part of a future that belonged to them. But beneath the hopeful veneer, there was another Brooklyn, a dangerous place where grown men reached for innocent girls in dark hallways, where ghosts haunted the night, where mothers disappeared. A world where madness was just a sunset away and fathers found hope in religion. Like Louise Meriwetherâ€™s Daddy Was a Number Runner and Dorothy Allisonâ€™s Bastard Out of Carolina, Jacqueline Woodsonâ€™s Another Brooklyn heartbreakingly illuminates the formative time when childhood gives way to adulthoodâ€”the promise and peril of growing upâ€”and exquisitely renders a powerful, indelible, and fleeting friendship that united four young lives.");
+				"The acclaimed New York Times bestselling and National Book Award–winning author of Brown Girl Dreaming delivers her first adult novel in twenty years. Running into a long-ago friend sets memory from the 1970s in motion for August, transporting her to a time and a place where friendship was everything—until it wasn’t. For August and her girls, sharing confidences as they ambled through neighborhood streets, Brooklyn was a place where they believed that they were beautiful, talented, brilliant—a part of a future that belonged to them. But beneath the hopeful veneer, there was another Brooklyn, a dangerous place where grown men reached for innocent girls in dark hallways, where ghosts haunted the night, where mothers disappeared. A world where madness was just a sunset away and fathers found hope in religion. Like Louise Meriwether’s Daddy Was a Number Runner and Dorothy Allison’s Bastard Out of Carolina, Jacqueline Woodson’s Another Brooklyn heartbreakingly illuminates the formative time when childhood gives way to adulthood—the promise and peril of growing up—and exquisitely renders a powerful, indelible, and fleeting friendship that united four young lives.");
 
 		nb.createTextNote("Holiday", "Vietnam",
 				"What I should Bring? When I should go? Ask Romina if she wants to come");
