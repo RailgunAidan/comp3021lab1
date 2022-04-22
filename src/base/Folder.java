@@ -10,7 +10,7 @@ public class Folder implements Comparable<Folder>,Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Note> notes;
 	private String name;
 	
@@ -149,6 +149,25 @@ public class Folder implements Comparable<Folder>,Serializable{
 		//result
 		return result_list;
 		
+	}
+	
+	public boolean removeNotes(String title) {
+		//TODO
+		// Given title of note and then delete it from the folder
+		// True if delete success, otherwise return false
+		Note nFound = null;
+		for (Note n : notes) {
+			if(n.getTitle().equals(title)) {
+				nFound = n;
+				break;
+			}
+		}
+		if(nFound != null) {
+			// Found
+			notes.remove(nFound);
+			return true;
+		}
+		return false;
 	}
 	
 	

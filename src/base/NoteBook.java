@@ -131,4 +131,11 @@ public class NoteBook implements Serializable{
 		}
 		return true;
 	}
+	
+	// lab 8
+	public void addFolder(String folderName) {
+		//TO DO
+		Folder newFolder = new Folder(folderName);
+		folders.add(newFolder);
+	}
 }

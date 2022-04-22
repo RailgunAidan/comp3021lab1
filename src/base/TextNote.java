@@ -9,7 +9,7 @@ public class TextNote extends Note {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5L;
+	private static final long serialVersionUID = 1L;
 	String content;
 	public TextNote(String title) {
 		super(title);
