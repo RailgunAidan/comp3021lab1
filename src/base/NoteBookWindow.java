@@ -600,7 +600,7 @@ public class NoteBookWindow extends Application {
 
 	private void loadNoteBook() {
 		NoteBook nb = new NoteBook();
-		nb.createTextNote("COMP3021", "COMP3021 syllabus", "Be able to implement object-oriented concepts in Java. And this is old load.");
+		nb.createTextNote("COMP3021", "COMP3021 syllabus", "Be able to implement object-oriented concepts in Java. And this is load from default.");
 		nb.createTextNote("COMP3021", "course information",
 				"Introduction to Java Programming. Fundamentals include language syntax, object-oriented programming, inheritance, interface, polymorphism, exception handling, multithreading and lambdas.");
 		nb.createTextNote("COMP3021", "Lab requirement",
